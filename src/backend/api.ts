@@ -6,6 +6,8 @@ import { fakeDataBase } from './db';
 import { fakeDemoRedisCache } from './cache';
 import { COLLECTIONS } from "./collections";
 import { ITEMS } from "./items";
+import { BUNDLES } from "./bundles";
+import { BITSTREAMS } from "./bitstreams";
 import { METADATA } from "./metadata";
 
 // you would use cookies/token etc
@@ -28,10 +30,6 @@ export function serverApi(req, res) {
     })
     .then(data => res.json(data));
 }
-
-
-let COLLECTION_COUNT = 2;
-let ITEM_COUNT = 2;
 
 
 function toJSONAPIResponse(req, data, included?) {
@@ -179,6 +177,73 @@ export function createMockApi() {
     //
     //   res.json(req.item);
     });
+
+    router.route('/bundles')
+        .get(function(req, res) {
+            console.log('GET');
+            // 70ms latency
+            setTimeout(function() {
+                res.json(toJSONAPIResponse(req, BUNDLES));
+            }, 0);
+        });
+
+    router.param('bundle_id', function(req, res, next, bundle_id) {
+        // ensure correct prop type
+        let id = req.params.bundle_id;
+        try {
+            req.bundle_id = id;
+            req.bundle = BUNDLES.find((bundle) => {
+                return bundle.id === id;
+            });
+            next();
+        } catch (e) {
+            next(new Error('failed to load item'));
+        }
+    });
+
+    router.route('/bundles/:bundle_id')
+        .get(function(req, res) {
+            console.log('GET', util.inspect(req.bundle, { colors: true }));
+            const metadataIds: string[] = req.bundle.relationships.metadata.data.map(obj => obj.id);
+            const bundleMetadata: any[] = METADATA.filter((metadatum) => {
+                return metadataIds.indexOf(metadatum.id) >= 0
+            });
+            res.json(toJSONAPIResponse(req, req.bundle, bundleMetadata));
+        });
+
+
+    router.route('/bitstreams')
+        .get(function(req, res) {
+            console.log('GET');
+            // 70ms latency
+            setTimeout(function() {
+                res.json(toJSONAPIResponse(req, BITSTREAMS));
+            }, 0);
+        });
+
+    router.param('bitstream_id', function(req, res, next, bitstream_id) {
+        // ensure correct prop type
+        let id = req.params.bitstream_id;
+        try {
+            req.bitstream_id = id;
+            req.bitstream = BITSTREAMS.find((bitstream) => {
+                return bitstream.id === id;
+            });
+            next();
+        } catch (e) {
+            next(new Error('failed to load item'));
+        }
+    });
+
+    router.route('/bitstreams/:bitstream_id')
+        .get(function(req, res) {
+            console.log('GET', util.inspect(req.bitstream, { colors: true }));
+            const metadataIds: string[] = req.bitstream.relationships.metadata.data.map(obj => obj.id);
+            const bitstreamMetadata: any[] = METADATA.filter((metadatum) => {
+                return metadataIds.indexOf(metadatum.id) >= 0
+            });
+            res.json(toJSONAPIResponse(req, req.bitstream, bitstreamMetadata));
+        });
 
   return router;
 }

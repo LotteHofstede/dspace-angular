@@ -16,6 +16,9 @@ export const COLLECTIONS = [
           { "type": "items", "id": "21539b1d-9ef1-4eda-9c77-49565b5bfb78" },
           { "type": "items", "id": "be8325f7-243b-49f4-8a4b-df2b793ff3b5" }
         ]
+      },
+      "metadata": {
+        "data": []
       }
     }
   },
@@ -36,6 +39,9 @@ export const COLLECTIONS = [
           { "type": "items", "id": "21539b1d-9ef1-4eda-9c77-49565b5bfb78" },
           { "type": "items", "id": "be8325f7-243b-49f4-8a4b-df2b793ff3b5" }
         ]
+      },
+      "metadata": {
+        "data": []
       }
     }
   }
