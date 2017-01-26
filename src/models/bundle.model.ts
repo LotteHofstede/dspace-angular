@@ -6,33 +6,15 @@ export class Bundle extends DSpaceObject {
     /**
      * The primary bitstream of this Bundle
      */
-    primaryBitstream:Bitstream;
+    primaryBitstream: Bitstream;
 
     /**
-     * @returns an array of Item that are direct parents of this Bundle
+     * An array of Items that are direct parents of this Bundle
      */
-    getParents(): Array<Item> {
-        return <Array<Item>> this.parents;
-    }
+    parents: Array<Item>;
 
     /**
-     * @param parents - array of Item that are direct parents of this Bundle
+     * The Item that owns this Bundle
      */
-    setParents(parents: Array<Bundle>) {
-        this.parents = parents;
-    }
-
-    /**
-     * @returns the Item that owns this Bundle
-     */
-    getOwner(): Item {
-        return <Item> this.owner;
-    }
-
-    /**
-     * @param owner - an instance of a Item subclass that owns this Bundle
-     */
-    setOwner(owner: Item) {
-        this.owner = owner;
-    }
+    owner: Item;
 }
