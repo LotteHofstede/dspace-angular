@@ -71,14 +71,7 @@ export class ObjectListComponent implements OnChanges, OnInit {
     this.pageInfo = this.objects.pageInfo;
   }
 
-  /**
-   * @param route
-   *    Route is a singleton service provided by Angular.
-   * @param router
-   *    Router is a singleton service provided by Angular.
-   */
-  constructor(
-    private cdRef: ChangeDetectorRef) {
+  constructor() {
   }
 
   onPageChange(event) {
