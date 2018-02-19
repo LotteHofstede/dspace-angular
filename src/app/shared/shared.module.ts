@@ -13,6 +13,7 @@ import { EnumKeysPipe } from './utils/enum-keys-pipe';
 import { FileSizePipe } from './utils/file-size-pipe';
 import { SafeUrlPipe } from './utils/safe-url-pipe';
 import { TruncatePipe } from './utils/truncate.pipe';
+import { CapitalizePipe } from './utils/capitalize.pipe';
 
 import { CollectionListElementComponent } from './object-list/collection-list-element/collection-list-element.component';
 import { CommunityListElementComponent } from './object-list/community-list-element/community-list-element.component';
@@ -58,7 +59,8 @@ const PIPES = [
   EnumKeysPipe,
   FileSizePipe,
   SafeUrlPipe,
-  TruncatePipe
+  TruncatePipe,
+  CapitalizePipe
 ];
 
 const COMPONENTS = [

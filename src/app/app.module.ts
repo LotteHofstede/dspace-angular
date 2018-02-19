@@ -39,7 +39,7 @@ export function getBase() {
 }
 
 export function getMetaReducers(config: GlobalConfig): Array<MetaReducer<AppState>> {
-  const metaReducers: Array<MetaReducer<AppState>> = config.production ? appMetaReducers : [...appMetaReducers, storeFreeze];
+  const metaReducers: Array<MetaReducer<AppState>> = config.production ? appMetaReducers : [...appMetaReducers];
   return config.debug ? [...metaReducers, ...debugMetaReducers] : metaReducers;
 }
 

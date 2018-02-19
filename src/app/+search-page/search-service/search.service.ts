@@ -19,6 +19,7 @@ import { SearchResult } from '../search-result.model';
 import { FacetValue } from './facet-value.model';
 import { FilterType } from './filter-type.model';
 import { SearchFilterConfig } from './search-filter-config.model';
+import { AppliedFilter } from './applied-filter.model';
 
 function shuffle(array: any[]) {
   let i = 0;
@@ -82,6 +83,21 @@ export class SearchService implements OnDestroy {
         hasFacets: false,
         isOpenByDefault: false
       })
+  ];
+
+  appliedFilters: AppliedFilter[] = [
+      {
+        filter: 'author',
+        operator: 'equals',
+        value: 'eb04ac85-3fe7-45b7-8400-02cb8df0f965',
+        label: 'Vandesande, Dirk'
+      },
+      {
+        filter: 'subject',
+        operator: 'contains',
+        value: 'Mus Musculus',
+        label: 'Mus Musculus'
+      }
   ];
   // searchOptions: BehaviorSubject<SearchOptions>;
   searchOptions: SearchOptions;
@@ -250,6 +266,20 @@ export class SearchService implements OnDestroy {
 
   getSearchLink() {
     return this.searchLink;
+  }
+
+  getAppliedFilters(): Observable<RemoteData<AppliedFilter[]>> {
+    const requestPending = false;
+    const responsePending = false;
+    const isSuccessful = true;
+    const error = undefined;
+    return Observable.of(new RemoteData(
+      requestPending,
+      responsePending,
+      isSuccessful,
+      error,
+      this.appliedFilters
+    ));
   }
 
   ngOnDestroy(): void {

@@ -13,6 +13,10 @@ export class RouteService {
     return this.route.queryParamMap.map((map) => map.getAll(paramName));
   }
 
+  // getAllQueryParameters(): Observable<string[]> {
+  //   return this.route.queryParamMap.map((map) => map.getAll(paramName));
+  // }
+
   getQueryParameterValue(paramName: string): Observable<string> {
     return this.route.queryParamMap.map((map) => map.get(paramName));
   }

@@ -37,6 +37,10 @@ export class SearchFilterService {
     return this.routeService.removeQueryParameterValue(filterConfig.paramName, value);
   }
 
+  getQueryParamsWithoutByName(filterConfigName: string, value: string) {
+    return this.routeService.removeQueryParameterValue('f.' + filterConfigName, value);
+  }
+
   getQueryParamsWith(filterConfig: SearchFilterConfig, value: string) {
     return this.routeService.addQueryParameterValue(filterConfig.paramName, value);
   }
