@@ -19,7 +19,7 @@ import { RemoteData } from '../../core/data/remote-data';
 })
 
 export class SearchLabelsComponent {
-  protected appliedFilters: Observable<RemoteData<AppliedFilter[]>>;
+  appliedFilters: Observable<RemoteData<AppliedFilter[]>>;
 
   constructor(private searchService: SearchService, private filterService: SearchFilterService) {
     this.appliedFilters = searchService.getAppliedFilters();
