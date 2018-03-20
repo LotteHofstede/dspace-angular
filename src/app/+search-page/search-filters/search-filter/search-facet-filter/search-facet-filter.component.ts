@@ -4,7 +4,10 @@ import { SearchFilterConfig } from '../../../search-service/search-filter-config
 import { Params, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SearchFilterService } from '../search-filter.service';
-import { isNotEmpty } from '../../../../shared/empty.util';
+import { isNotEmpty, hasValue } from '../../../../shared/empty.util';
+import { RemoteData } from '../../../../core/data/remote-data';
+import { PaginatedList } from '../../../../core/data/paginated-list';
+import { SearchService } from '../../../search-service/search.service';
 
 /**
  * This component renders a simple item page.
@@ -19,17 +22,23 @@ import { isNotEmpty } from '../../../../shared/empty.util';
 })
 
 export class SearchFacetFilterComponent implements OnInit {
-  @Input() filterValues: FacetValue[];
   @Input() filterConfig: SearchFilterConfig;
   @Input() selectedValues: string[];
+  filterValues: Observable<RemoteData<PaginatedList<FacetValue>>>;
   currentPage: Observable<number>;
   filter: string;
 
-  constructor(private filterService: SearchFilterService, private router: Router) {
+  constructor(private searchService: SearchService, private filterService: SearchFilterService, private router: Router) {
   }
 
   ngOnInit(): void {
-    this.currentPage = this.filterService.getPage(this.filterConfig.name);
+    this.currentPage = this.getCurrentPage();
+
+    this.currentPage.subscribe((page) => this.updateList(page))
+  }
+
+  updateList(page: number): void {
+    this.filterValues = this.searchService.getFacetValuesFor(this.filterConfig.name, undefined, undefined, page, this.filterConfig.pageSize);
   }
 
   isChecked(value: FacetValue): Observable<boolean> {
@@ -48,13 +57,13 @@ export class SearchFacetFilterComponent implements OnInit {
     return this.filterService.getQueryParamsWithout(this.filterConfig, value);
   }
 
-  get facetCount(): Observable<number> {
-    const resultCount = this.filterValues.length;
-    return this.currentPage.map((page: number) => {
-      const max = page * this.filterConfig.pageSize;
-      return max > resultCount ? resultCount : max;
-    });
-  }
+  // get facetCount(): Observable<number> {
+  //   const resultCount = this.filterValues.length;
+  //   return this.currentPage.map((page: number) => {
+  //     const max = page * this.filterConfig.pageSize;
+  //     return max > resultCount ? resultCount : max;
+  //   });
+  // }
 
   showMore() {
     this.filterService.incrementPage(this.filterConfig.name);
@@ -82,5 +91,13 @@ export class SearchFacetFilterComponent implements OnInit {
       this.filter = '';
       sub.unsubscribe();
     }
+  }
+
+  hasValue(o: any): boolean {
+    return hasValue(o);
+  }
+
+  isLastPage(): Observable<boolean> {
+    return this.filterValues.map((rd: RemoteData<PaginatedList<FacetValue>>) => rd.payload.currentPage >= rd.payload.totalPages);
   }
 }

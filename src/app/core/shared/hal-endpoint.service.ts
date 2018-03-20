@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { distinctUntilChanged, map, flatMap, startWith } from 'rxjs/operators';
+import { distinctUntilChanged, map, flatMap, startWith, tap } from 'rxjs/operators';
 import { RequestService } from '../data/request.service';
 import { ResponseCacheService } from '../cache/response-cache.service';
 import { GlobalConfig } from '../../../config/global-config.interface';
@@ -50,6 +50,7 @@ export class HALEndpointService {
     const pipeArguments = path
       .map((subPath: string) => [
         flatMap((href: string) => this.getEndpointMapAt(href)),
+        tap((endpointMap: EndpointMap) => console.log('endpointMap:', endpointMap, 'Path:  ', path.join('/'))),
         map((endpointMap: EndpointMap) => endpointMap[subPath]),
       ])
       .reduce((combined, thisElement) => [...combined, ...thisElement], []);

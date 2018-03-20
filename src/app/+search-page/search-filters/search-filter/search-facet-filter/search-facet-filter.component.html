@@ -6,24 +6,25 @@
             <input type="checkbox" [checked]="true"/>
             <span class="filter-value">{{value}}</span>
         </a>
-        <a *ngFor="let value of filterValues; let i=index" class="d-block clearfix"
-           [routerLink]="[getSearchLink()]"
-           [queryParams]="getQueryParamsWith(value.value) | async">
-            <ng-template [ngIf]="i < (facetCount | async)">
+        <ng-template [ngIf]="hasValue((filterValues | async)?.payload)">
+            <a *ngFor="let value of (filterValues | async)?.payload; let i=index" class="d-block clearfix"
+               [routerLink]="[getSearchLink()]"
+               [queryParams]="getQueryParamsWith(value.value) | async">
                     <input type="checkbox" [checked]="false"/>
                     <span class="filter-value">{{value.value}}</span>
-                <span class="float-right filter-value-count">
+                    <span class="float-right filter-value-count">
                     <span class="badge badge-secondary badge-pill">{{value.count}}</span>
                 </span>
-            </ng-template>
-        </a>
-        <div class="clearfix toggle-more-filters">
-            <a class="float-left" *ngIf="filterValues.length > (facetCount | async)"
-               (click)="showMore()">{{"search.filters.filter.show-more"
-                | translate}}</a>
-            <a class="float-right" *ngIf="(currentPage | async) > 1" (click)="showFirstPageOnly()">{{"search.filters.filter.show-less"
-                | translate}}</a>
-        </div>
+            </a>
+            <div class="clearfix toggle-more-filters">
+                <a class="float-left" *ngIf="!(isLastPage() | async)"
+                   (click)="showMore()">{{"search.filters.filter.show-more"
+                    | translate}}</a>
+                <a class="float-right" *ngIf="(currentPage | async) > 1"
+                   (click)="showFirstPageOnly()">{{"search.filters.filter.show-less"
+                    | translate}}</a>
+            </div>
+        </ng-template>
     </div>
     <form #form="ngForm" (ngSubmit)="onSubmit(form.value)" class="add-filter"
           [action]="getCurrentUrl()">
